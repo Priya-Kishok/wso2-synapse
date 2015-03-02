@@ -27,10 +27,7 @@ public final class MessageProcessorConstants {
      */
     public static final String INTERVAL = "interval";
     public static final String CRON_EXPRESSION = "cronExpression";
-
     public static final String MEMBER_COUNT = "member.count";
-
-
     // Threshould interval value is 1000.
     public static final long THRESHOULD_INTERVAL = 1000;
 
