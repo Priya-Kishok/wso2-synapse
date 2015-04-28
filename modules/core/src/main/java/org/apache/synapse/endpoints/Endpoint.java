@@ -124,4 +124,41 @@ public interface Endpoint extends ManagedLifecycle, SynapseArtifact, Nameable {
      */
     public void setErrorHandler(String onFaultMessageStore);
 
+    /**
+     * Set the whether the Endpoint is deployed from CApp
+     * @param isDeployFromCApp from which we can identify whether the Endpoint is deployed from CApp
+     */
+    public void setDeployFromCApp(boolean isDeployFromCApp);
+
+    /**
+     * Get the value about whether the Endpoint is deployed from CApp
+     * @return boolean true if it deploys from CApp else false
+     */
+    public boolean isDeployFromCApp();
+
+    /**
+     * Set the CApp FilePath from which the endpoint is loaded
+     * @param cAppFilePath from which the endpoint is loaded
+     */
+    public void setCAppFilePath(String cAppFilePath);
+
+    /**
+     * Get the CAppFilePath from which this endpoint is loaded
+     * @return String CApp FilePath
+     */
+    public String getCAppFilePath();
+
+    /**
+     * Set the CApp File Name from which the endpoint is loaded
+     * @param cAppFileName from which the endpoint is loaded
+     */
+    public void setCAppFileName(String cAppFileName);
+
+    /**
+     * Get the CApp File Name from which this endpoint is loaded
+     * @return String CApp File Name
+     */
+    public String getCAppFileName();
+
+
 }

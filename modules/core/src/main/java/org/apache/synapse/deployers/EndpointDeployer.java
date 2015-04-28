@@ -42,6 +42,16 @@ public class EndpointDeployer extends AbstractSynapseArtifactDeployer {
     private static Log log = LogFactory.getLog(EndpointDeployer.class);
 
     @Override
+    public String getparentFile() {
+       return super.getparentFile();
+    }
+
+    @Override
+    public void setcApp(String cApp) {
+        super.setcApp(cApp);
+    }
+
+    @Override
     public String deploySynapseArtifact(OMElement artifactConfig, String fileName,
                                         Properties properties) {
 
@@ -51,6 +61,11 @@ public class EndpointDeployer extends AbstractSynapseArtifactDeployer {
 
         try {
             Endpoint ep = EndpointFactory.getEndpointFromElement(artifactConfig, false, properties);
+            if(fileName.contains("/carbonapps/")){
+                ep.setDeployFromCApp(true);
+                ep.setCAppFileName(getparentFile());
+                ep.setCAppFilePath(fileName);
+            }
             if (ep != null) {
                 ep.setFileName((new File(fileName)).getName());
                 if (log.isDebugEnabled()) {
@@ -140,7 +155,7 @@ public class EndpointDeployer extends AbstractSynapseArtifactDeployer {
             log.debug("Endpoint Undeployment of the endpoint named : "
                     + artifactName + " : Started");
         }
-        
+
         try {
             Endpoint ep = getSynapseConfiguration().getDefinedEndpoints().get(artifactName);
             if (ep != null) {
@@ -193,4 +208,5 @@ public class EndpointDeployer extends AbstractSynapseArtifactDeployer {
                     "Restoring of the endpoint named '" + artifactName + "' has failed", e);
         }
     }
+
 }

@@ -58,6 +58,15 @@ public abstract class AbstractSynapseArtifactDeployer extends AbstractDeployer {
     private static final Log log = LogFactory.getLog(AbstractSynapseArtifactDeployer.class);
     protected  Log deployerLog;
     protected ConfigurationContext cfgCtx;
+    private String cApp;
+
+    public String getparentFile() {
+        return cApp;
+    }
+
+    public void setcApp(String cApp) {
+        this.cApp = cApp;
+    }
 
     protected AbstractSynapseArtifactDeployer() {
         deployerLog = LogFactory.getLog(this.getClass());
@@ -65,7 +74,7 @@ public abstract class AbstractSynapseArtifactDeployer extends AbstractDeployer {
 
     /**
      * Initializes the Synapse artifact deployment
-     * 
+     *
      * @param configCtx Axis2 ConfigurationContext
      */
     public void init(ConfigurationContext configCtx) {
@@ -88,7 +97,7 @@ public abstract class AbstractSynapseArtifactDeployer extends AbstractDeployer {
      *
      * @param deploymentFileData file to be used for the deployment
      * @throws org.apache.axis2.deployment.DeploymentException in-case of an error in deploying the file
-     * 
+     *
      * @see org.apache.synapse.deployers.AbstractSynapseArtifactDeployer#deploySynapseArtifact(org.apache.axiom.om.OMElement,
      * String,java.util.Properties)
      */
@@ -101,6 +110,13 @@ public abstract class AbstractSynapseArtifactDeployer extends AbstractDeployer {
             return;
         }
 
+        if (deploymentFileData instanceof ApplicationDeploymentFileData) {
+            ApplicationDeploymentFileData t = (ApplicationDeploymentFileData) deploymentFileData;
+            setcApp(t.getParentFileName());
+        }
+
+        // cApp = deploymentFileData.getcApp();
+      //  setcApp(deploymentFileData.getcApp());
         String filename = SynapseArtifactDeploymentStore.getNormalizedAbsolutePath(
                 deploymentFileData.getAbsolutePath());
         if (log.isDebugEnabled()) {
@@ -132,7 +148,7 @@ public abstract class AbstractSynapseArtifactDeployer extends AbstractDeployer {
             deploymentStore.removeRestoredFile(filename);
             return;
         }
-        
+
         try {
             InputStream in = FileUtils.openInputStream(new File(filename));
             try {
@@ -142,7 +158,7 @@ public abstract class AbstractSynapseArtifactDeployer extends AbstractDeployer {
                         StAXUtils.createXMLStreamReader(in)).getDocumentElement();
                 Properties properties = new Properties();
                 properties.put(SynapseConstants.CLASS_MEDIATOR_LOADERS,
-                               deploymentStore.getClassMediatorClassLoaders());
+                        deploymentStore.getClassMediatorClassLoaders());
                 properties.put(SynapseConstants.RESOLVE_ROOT, getSynapseEnvironment()
                         .getServerContextInformation()
                         .getServerConfigurationInformation().getResolveRoot());
@@ -353,7 +369,7 @@ public abstract class AbstractSynapseArtifactDeployer extends AbstractDeployer {
      * @param fileName file name from which this artifact is being loaded
      * @param properties Properties associated with the artifact
      * @return String artifact name created by the deployment task
-     * 
+     *
      * @see AbstractSynapseArtifactDeployer#deploy(
      * org.apache.axis2.deployment.repository.util.DeploymentFileData)
      */
@@ -414,7 +430,7 @@ public abstract class AbstractSynapseArtifactDeployer extends AbstractDeployer {
         return (SynapseEnvironment) synCfgParam.getValue();
     }
 
-    protected ServerConfigurationInformation getServerConfigurationInformation() 
+    protected ServerConfigurationInformation getServerConfigurationInformation()
             throws DeploymentException {
         Parameter serverCfgParam =
                 cfgCtx.getAxisConfiguration().getParameter(
@@ -514,7 +530,7 @@ public abstract class AbstractSynapseArtifactDeployer extends AbstractDeployer {
                 try {
                     FileUtils.moveFile(file, new File(backupFilePath));
                 } catch (IOException e) {
-		    log.warn("Error while backing up the artifact: ", e);
+                    log.warn("Error while backing up the artifact: ", e);
                     return "ERROR_WHILE_BACKING_UP_ARTIFACT";
                 }
             }
@@ -523,7 +539,7 @@ public abstract class AbstractSynapseArtifactDeployer extends AbstractDeployer {
     }
 
     private void resetDefaultSequence(String sequenceFileName, String fileName, SynapseArtifactDeploymentStore deploymentStore)
-    throws IOException, XMLStreamException {
+            throws IOException, XMLStreamException {
 
         String dirpath = fileName.substring(0, fileName.lastIndexOf(File.separator));
         String seqOrgi = dirpath + File.separator + sequenceFileName;
@@ -553,7 +569,7 @@ public abstract class AbstractSynapseArtifactDeployer extends AbstractDeployer {
     }
 
     private String updateDefaultSequence(String filename, OMElement element, Properties properties, String lstupdFile,
-                                       SynapseArtifactDeploymentStore deploymentStore) {
+                                         SynapseArtifactDeploymentStore deploymentStore) {
         String derpath = filename.substring(0, filename.lastIndexOf(File.separator));
         String seqFile = derpath + File.separator + lstupdFile;
         String existingArtifactName

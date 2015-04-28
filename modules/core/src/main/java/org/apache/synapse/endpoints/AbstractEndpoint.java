@@ -104,6 +104,15 @@ public abstract class AbstractEndpoint extends FaultHandler implements Endpoint,
     
     private boolean forceBuildMC =false;
 
+    /** Is this endpoint deploy from CApp */
+    private boolean isDeployFromCApp = false;
+
+    /** CApp file path */
+    private String cAppFilePath;
+
+    /** CApp file name */
+    private String cAppFileName;
+
     protected AbstractEndpoint() {
         log = LogFactory.getLog(this.getClass());
     }
@@ -154,6 +163,18 @@ public abstract class AbstractEndpoint extends FaultHandler implements Endpoint,
     public String getFileName() {
         return fileName;
     }
+
+    public void setDeployFromCApp(boolean isDeployFromCApp) {this.isDeployFromCApp = isDeployFromCApp;}
+
+    public boolean isDeployFromCApp() {return isDeployFromCApp;}
+
+    public void setCAppFilePath(String cAppFilePath) {this.cAppFilePath = cAppFilePath; }
+
+    public String getCAppFilePath() { return cAppFilePath; }
+
+    public String getCAppFileName() { return cAppFileName; }
+
+    public void setCAppFileName(String cAppFileName) { this.cAppFileName = cAppFileName;}
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
